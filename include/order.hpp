@@ -1,7 +1,7 @@
 #pragma once
 #include "common.hpp"
 
-using namespace std;
+class PriceLevel;
 
 struct alignas(64) Order{
 
@@ -9,9 +9,11 @@ struct alignas(64) Order{
     Price price;
     Quantity count;
     Side side;
+    bool in_use = false; // Set while the order is checked out of an OrderPool.
 
     Order* next = nullptr;
     Order* prev = nullptr;
+    const PriceLevel* level = nullptr; // The level currently queueing this order.
 };
 
 static_assert(sizeof(Order) == 64, "Order must occupy one 64-byte cache line");
